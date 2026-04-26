@@ -1,0 +1,5 @@
+co\edu\univalle\vivaeventoseventservice\application\dto\CreateEventRequest.class
+co\edu\univalle\vivaeventoseventservice\infrastructure\web\EventController.class
+co\edu\univalle\vivaeventoseventservice\VivaeventosEventServiceApplication.class
+co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\EventJpaRepository.class
+co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\EventEntity.class
