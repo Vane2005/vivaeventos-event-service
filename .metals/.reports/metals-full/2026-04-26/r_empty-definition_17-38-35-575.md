@@ -1,3 +1,14 @@
+error id: file:///D:/codigo/desarrollo%203/Proyecto%20del%20curso/vivaeventos-event-service/src/main/java/co/edu/univalle/vivaeventoseventservice/infrastructure/web/EventController.java:_empty_/RestController#
+file:///D:/codigo/desarrollo%203/Proyecto%20del%20curso/vivaeventos-event-service/src/main/java/co/edu/univalle/vivaeventoseventservice/infrastructure/web/EventController.java
+empty definition using pc, found symbol in pc: _empty_/RestController#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1035
+uri: file:///D:/codigo/desarrollo%203/Proyecto%20del%20curso/vivaeventos-event-service/src/main/java/co/edu/univalle/vivaeventoseventservice/infrastructure/web/EventController.java
+text:
+```scala
 package co.edu.univalle.vivaeventoseventservice.infrastructure.web;
 
 import co.edu.univalle.vivaeventoseventservice.application.dto.CreateEventRequest;
@@ -18,7 +29,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@RestCo@@ntroller
 @RequestMapping("/api/v1/events")
 public class EventController {
 
@@ -88,3 +99,9 @@ public class EventController {
         return ResponseEntity.status(201).body(saved);
     }
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/RestController#
