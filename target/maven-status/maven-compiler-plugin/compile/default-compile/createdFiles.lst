@@ -1,10 +1,11 @@
 co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\TicketTypeEntity.class
-co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\EventJpaRepository.class
 co\edu\univalle\vivaeventoseventservice\domain\model\TicketType.class
 co\edu\univalle\vivaeventoseventservice\application\dto\CreateEventRequest.class
-co\edu\univalle\vivaeventoseventservice\application\dto\TicketTypeRequest.class
-co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\TicketTypeJpaRepository.class
 co\edu\univalle\vivaeventoseventservice\infrastructure\web\EventController.class
 co\edu\univalle\vivaeventoseventservice\VivaeventosEventServiceApplication.class
+co\edu\univalle\vivaeventoseventservice\application\dto\CreateDiscountCodeRequest.class
 co\edu\univalle\vivaeventoseventservice\application\dto\DefineTicketTypesRequest.class
+co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\EventJpaRepository.class
+co\edu\univalle\vivaeventoseventservice\application\dto\TicketTypeRequest.class
+co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\TicketTypeJpaRepository.class
 co\edu\univalle\vivaeventoseventservice\infrastructure\persistence\EventEntity.class
