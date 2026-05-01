@@ -36,13 +36,7 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      env:
-        SPRING_PROFILES_ACTIVE: test
-        # These are for the postgres service which is used during tests if H2 isn't picked up
-        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/event-service
-        SPRING_DATASOURCE_USERNAME: postgres
-        SPRING_DATASOURCE_PASSWORD: 1234
-      run: mvn -B package -Dspring.profiles.active=test -X --file pom.xml
+      run: chmod +x mvnw && mvn -B package -Dspring.profiles.active=test -X --file pom.xml
 
     - name: Build Docker image
       run: docker build . -t vivaeventos-event-service:latest
