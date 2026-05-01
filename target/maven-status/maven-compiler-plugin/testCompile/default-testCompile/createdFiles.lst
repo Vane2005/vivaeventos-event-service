@@ -1,1 +1,2 @@
-co\edu\univalle\vivaeventoseventservice\VivaeventosEventServiceApplicationTests.class
+co/edu/univalle/vivaeventoseventservice/VivaeventosEventServiceApplicationTests.class
+co/edu/univalle/vivaeventoseventservice/application/usecase/GetTicketTypesUseCaseTest.class
