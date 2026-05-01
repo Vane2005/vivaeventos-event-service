@@ -72,3 +72,14 @@ $RECYCLE.BIN/
 
 # Metals lock file for IntelliJ IDEA
 **/metals.lock.db
+
+# Secrets
+.env
+
+# Build
+target/
+.idea/
+.vscode/
+.mvn/
+mvnw
+mvnw.cmd
