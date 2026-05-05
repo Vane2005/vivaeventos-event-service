@@ -1,3 +1,14 @@
+error id: file:///C:/Users/Usuario/Desktop/event-service/vivaeventos-event-service/src/main/java/co/edu/univalle/vivaeventoseventservice/infrastructure/persistence/EventEntity.java:_empty_/Enumerated#
+file:///C:/Users/Usuario/Desktop/event-service/vivaeventos-event-service/src/main/java/co/edu/univalle/vivaeventoseventservice/infrastructure/persistence/EventEntity.java
+empty definition using pc, found symbol in pc: _empty_/Enumerated#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 976
+uri: file:///C:/Users/Usuario/Desktop/event-service/vivaeventos-event-service/src/main/java/co/edu/univalle/vivaeventoseventservice/infrastructure/persistence/EventEntity.java
+text:
+```scala
 package co.edu.univalle.vivaeventoseventservice.infrastructure.persistence;
 
 import jakarta.persistence.*;
@@ -35,9 +46,9 @@ public class EventEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private EventStatus status = EventStatus.DRAFT;
+    @Enumerate@@d(EnumType.STRING)
+@Column(nullable = false, length = 20)
+private EventStatus status = EventStatus.DRAFT
 
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
@@ -63,8 +74,11 @@ public class EventEntity {
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
-    public EventStatus getStatus() { return status; }
-    public void setStatus(EventStatus status) { this.status = status; }
-
 
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/Enumerated#
