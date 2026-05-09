@@ -1,6 +1,8 @@
 package co.edu.univalle.vivaeventoseventservice.infrastructure.web;
 
 import co.edu.univalle.vivaeventoseventservice.application.dto.CreateDiscountCodeRequest;
+import co.edu.univalle.vivaeventoseventservice.application.dto.DiscountCodeResponse;
+import co.edu.univalle.vivaeventoseventservice.application.usecase.ValidateDiscountCodeUseCase;
 import co.edu.univalle.vivaeventoseventservice.domain.model.DiscountType;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.DiscountCodeEntity;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.DiscountCodeJpaRepository;
@@ -18,10 +20,19 @@ public class DiscountCodeController {
 
     private final DiscountCodeJpaRepository discountCodeJpaRepository;
 
-    public DiscountCodeController(DiscountCodeJpaRepository discountCodeJpaRepository) {
+    private final ValidateDiscountCodeUseCase validateDiscountCodeUseCase;
+
+    public DiscountCodeController(DiscountCodeJpaRepository discountCodeJpaRepository,
+                                  ValidateDiscountCodeUseCase validateDiscountCodeUseCase) {
         this.discountCodeJpaRepository = discountCodeJpaRepository;
+        this.validateDiscountCodeUseCase = validateDiscountCodeUseCase;
     }
 
+    // Nuevo endpoint
+    @PostMapping("/{code}/validate")
+    public ResponseEntity<DiscountCodeResponse> validate(@PathVariable String code) {
+        return ResponseEntity.ok(validateDiscountCodeUseCase.validate(code));
+    }
     @PostMapping
     public ResponseEntity<DiscountCodeEntity> create(
             @RequestHeader("X-User-Id") String userId,
