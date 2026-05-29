@@ -1,18 +1,15 @@
 package co.edu.univalle.vivaeventoseventservice.infrastructure.web;
 
-import co.edu.univalle.vivaeventoseventservice.application.dto.CreateEventRequest;
-import co.edu.univalle.vivaeventoseventservice.application.dto.TicketTypeResponse;
+import co.edu.univalle.vivaeventoseventservice.application.dto.*;
+import co.edu.univalle.vivaeventoseventservice.application.usecase.CancelEventUseCase;
 import co.edu.univalle.vivaeventoseventservice.application.usecase.GetTicketTypesUseCase;
 import co.edu.univalle.vivaeventoseventservice.application.usecase.ReserveStockUseCase;
+import co.edu.univalle.vivaeventoseventservice.application.usecase.UpdateEventUseCase;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.EventEntity;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.EventJpaRepository;
-import co.edu.univalle.vivaeventoseventservice.application.dto.DefineTicketTypesRequest;
-import co.edu.univalle.vivaeventoseventservice.application.dto.TicketTypeRequest;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.TicketTypeEntity;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.TicketTypeJpaRepository;
 import co.edu.univalle.vivaeventoseventservice.domain.model.EventStatus;
-import co.edu.univalle.vivaeventoseventservice.application.dto.EventSummaryResponse;
-import co.edu.univalle.vivaeventoseventservice.application.dto.EventDetailResponse;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -32,15 +29,21 @@ public class EventController {
     private final TicketTypeJpaRepository ticketTypeJpaRepository;
     private final GetTicketTypesUseCase getTicketTypesUseCase;
     private final ReserveStockUseCase reserveStockUseCase;
+    private final CancelEventUseCase cancelEventUseCase;
+    private final UpdateEventUseCase updateEventUseCase;
 
     public EventController(EventJpaRepository eventJpaRepository,
                            TicketTypeJpaRepository ticketTypeJpaRepository,
                            GetTicketTypesUseCase getTicketTypesUseCase,
-                           ReserveStockUseCase reserveStockUseCase) {
+                           ReserveStockUseCase reserveStockUseCase,
+                           CancelEventUseCase cancelEventUseCase,
+                           UpdateEventUseCase updateEventUseCase) {
         this.eventJpaRepository = eventJpaRepository;
         this.ticketTypeJpaRepository = ticketTypeJpaRepository;
         this.getTicketTypesUseCase = getTicketTypesUseCase;
         this.reserveStockUseCase = reserveStockUseCase;
+        this.cancelEventUseCase = cancelEventUseCase;
+        this.updateEventUseCase = updateEventUseCase;
     }
 
     @PostMapping
@@ -54,7 +57,6 @@ public class EventController {
         entity.setEventDate(request.getEventDate());
         entity.setLocation(request.getLocation());
         entity.setCapacity(request.getCapacity());
-
         entity.setCreatedBy(userId);
         entity.setCreatedAt(Instant.now());
 
@@ -71,6 +73,10 @@ public class EventController {
         EventEntity event = eventJpaRepository.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento no encontrado"));
 
+        if (event.getStatus() == EventStatus.CANCELLED) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "No se pueden agregar boletas a un evento cancelado");
+        }
         int capacity = event.getCapacity();
 
         int totalExisting = ticketTypeJpaRepository.findByEvent_Id(eventId).stream()
@@ -101,7 +107,7 @@ public class EventController {
         return ResponseEntity.status(201).body(saved);
     }
 
-    // Listar tipos de boleta de un evento (cliente elige aquí)
+
     @GetMapping("/{eventId}/ticket-types")
     public ResponseEntity<List<TicketTypeResponse>> getTicketTypes(
             @PathVariable UUID eventId) {
@@ -113,7 +119,7 @@ public class EventController {
         return ResponseEntity.ok(response);
     }
 
-    // Obtener un tipo específico (order-service consulta precio y stock)
+
     @GetMapping("/ticket-types/{ticketTypeId}")
     public ResponseEntity<TicketTypeResponse> getTicketType(
             @PathVariable UUID ticketTypeId) {
@@ -121,7 +127,7 @@ public class EventController {
                 TicketTypeResponse.from(getTicketTypesUseCase.getById(ticketTypeId)));
     }
 
-    // Reservar stock (order-service llama esto al crear una orden)
+
     @PutMapping("/ticket-types/{ticketTypeId}/reserve")
     public ResponseEntity<Void> reserveStock(
             @PathVariable UUID ticketTypeId,
@@ -161,6 +167,23 @@ public class EventController {
 
     return ResponseEntity.ok(EventDetailResponse.from(event, ticketTypes));
    }
-
+    @PatchMapping("/{eventId}/cancel")
+    public ResponseEntity<Void> cancelEvent(
+            @RequestHeader("X-User-Id") String userId,
+            @PathVariable UUID eventId,
+            @Valid @RequestBody CancelEventRequest request
+    ) {
+        cancelEventUseCase.execute(eventId, userId, request.getReason());
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+    @PatchMapping("/{eventId}")
+    public ResponseEntity<EventEntity> updateEvent(
+            @RequestHeader("X-User-Id") String userId,
+            @PathVariable UUID eventId,
+            @Valid @RequestBody UpdateEventRequest request
+    ) {
+        EventEntity updated = updateEventUseCase.execute(eventId, userId, request);
+        return ResponseEntity.ok(updated);
+    }
 
 }

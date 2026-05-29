@@ -39,6 +39,18 @@ public class EventEntity {
     @Column(nullable = false, length = 20)
     private EventStatus status = EventStatus.DRAFT;
 
+
+
+    @Column(name = "cancelled_by", length = 100)
+    private String cancelledBy;
+
+    @Column(name = "cancelled_at")
+    private Instant cancelledAt;
+
+    @Column(name = "cancellation_reason", length = 1000)
+    private String cancellationReason;
+
+
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 
@@ -64,7 +76,17 @@ public class EventEntity {
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
     public EventStatus getStatus() { return status; }
-    public void setStatus(EventStatus status) { this.status = status; }
 
+    public void setStatus(EventStatus status) { this.status = status; }
+    public String getCancelledBy() { return cancelledBy; }
+    public void setCancelledBy(String cancelledBy) { this.cancelledBy = cancelledBy; }
+
+    public Instant getCancelledAt() { return cancelledAt; }
+    public void setCancelledAt(Instant cancelledAt) { this.cancelledAt = cancelledAt; }
+
+    public String getCancellationReason() { return cancellationReason; }
+    public void setCancellationReason(String cancellationReason) {
+        this.cancellationReason = cancellationReason;
+    }
 
 }
