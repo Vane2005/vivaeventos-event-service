@@ -17,6 +17,22 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - event-network
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: event-service-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - event-network
 
   app:
     build: .
