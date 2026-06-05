@@ -6,19 +6,23 @@ import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.EventE
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.TicketTypeEntity;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.TicketTypeJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class GetTicketTypesUseCaseTest {
 
     @Mock
@@ -27,43 +31,74 @@ class GetTicketTypesUseCaseTest {
     @InjectMocks
     private GetTicketTypesUseCase getTicketTypesUseCase;
 
+    private UUID eventId;
+    private UUID ticketTypeId;
+    private TicketTypeEntity entity;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+        eventId = UUID.randomUUID();
+        ticketTypeId = UUID.randomUUID();
 
-    @Test
-    void getById_WhenExists_ShouldReturnModel() {
-        UUID id = UUID.randomUUID();
-        UUID eventId = UUID.randomUUID();
-        
         EventEntity event = new EventEntity();
         event.setId(eventId);
 
-        TicketTypeEntity entity = new TicketTypeEntity();
-        entity.setId(id);
+        entity = new TicketTypeEntity();
+        entity.setId(ticketTypeId);
         entity.setEvent(event);
-        entity.setType(TicketType.GENERAL);
-        entity.setPrice(BigDecimal.valueOf(100));
+        entity.setType(TicketType.VIP);
+        entity.setPrice(new BigDecimal("80000"));
         entity.setQuantityAvailable(50);
+    }
 
-        when(ticketTypeJpaRepository.findById(id)).thenReturn(Optional.of(entity));
+    // ─── getByEvent ───────────────────────────────────────────────────────────
 
-        TicketTypeModel result = getTicketTypesUseCase.getById(id);
+    @Test
+    @DisplayName("getByEvent debe retornar lista de TicketTypeModel para el evento dado")
+    void getByEvent_returnsList() {
+        when(ticketTypeJpaRepository.findByEvent_Id(eventId)).thenReturn(List.of(entity));
 
-        assertNotNull(result);
-        assertEquals(id, result.getId());
-        assertEquals(eventId, result.getEventId());
-        assertEquals(TicketType.GENERAL, result.getType());
-        assertEquals(BigDecimal.valueOf(100), result.getPrice());
-        assertEquals(50, result.getQuantityAvailable());
+        List<TicketTypeModel> result = getTicketTypesUseCase.getByEvent(eventId);
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getId()).isEqualTo(ticketTypeId);
+        assertThat(result.get(0).getEventId()).isEqualTo(eventId);
+        assertThat(result.get(0).getType()).isEqualTo(TicketType.VIP);
+        assertThat(result.get(0).getPrice()).isEqualByComparingTo(new BigDecimal("80000"));
+        assertThat(result.get(0).getQuantityAvailable()).isEqualTo(50);
     }
 
     @Test
-    void getById_WhenNotExists_ShouldThrowException() {
-        UUID id = UUID.randomUUID();
-        when(ticketTypeJpaRepository.findById(id)).thenReturn(Optional.empty());
+    @DisplayName("getByEvent debe retornar lista vacía cuando no hay tipos para el evento")
+    void getByEvent_returnsEmptyList() {
+        when(ticketTypeJpaRepository.findByEvent_Id(eventId)).thenReturn(List.of());
 
-        assertThrows(ResponseStatusException.class, () -> getTicketTypesUseCase.getById(id));
+        List<TicketTypeModel> result = getTicketTypesUseCase.getByEvent(eventId);
+
+        assertThat(result).isEmpty();
+    }
+
+    // ─── getById ──────────────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("getById debe retornar el TicketTypeModel cuando existe")
+    void getById_returnsModel() {
+        when(ticketTypeJpaRepository.findById(ticketTypeId)).thenReturn(Optional.of(entity));
+
+        TicketTypeModel result = getTicketTypesUseCase.getById(ticketTypeId);
+
+        assertThat(result.getId()).isEqualTo(ticketTypeId);
+        assertThat(result.getType()).isEqualTo(TicketType.VIP);
+        assertThat(result.getQuantityAvailable()).isEqualTo(50);
+    }
+
+    @Test
+    @DisplayName("getById debe lanzar 404 cuando el tipo de boleta no existe")
+    void getById_throwsNotFound() {
+        when(ticketTypeJpaRepository.findById(ticketTypeId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> getTicketTypesUseCase.getById(ticketTypeId))
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("Tipo de boleta no encontrado");
     }
 }

@@ -3,10 +3,12 @@ package co.edu.univalle.vivaeventoseventservice.application.dto;
 import co.edu.univalle.vivaeventoseventservice.domain.model.DiscountType;
 import co.edu.univalle.vivaeventoseventservice.infrastructure.persistence.DiscountCodeEntity;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
+@Setter
 public class DiscountCodeResponse {
     private String code;
     private DiscountType discountType;
