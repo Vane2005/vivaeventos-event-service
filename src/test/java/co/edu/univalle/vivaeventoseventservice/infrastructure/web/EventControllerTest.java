@@ -429,7 +429,7 @@ class EventControllerTest {
         String body = """
                 {
                   "name": "Nuevo nombre",
-                  "description": "Desc",
+                  "description": "Descripción suficientemente larga",
                   "eventDate": "2030-12-01T20:00:00Z",
                   "location": "Bogotá",
                   "capacity": 300
