@@ -160,6 +160,7 @@
                                 <exclude>**/config/**</exclude>
                                 <exclude>**/model/**</exclude>
                                 <exclude>**/persistence/**</exclude>
+                                <exclude>**/messaging/**</exclude>
                                 <exclude>**/service/**</exclude>
                                 <exclude>**/*Application.class</exclude>
                             </excludes>

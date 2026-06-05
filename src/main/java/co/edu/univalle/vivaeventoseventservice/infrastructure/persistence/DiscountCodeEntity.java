@@ -2,6 +2,7 @@ package co.edu.univalle.vivaeventoseventservice.infrastructure.persistence;
 
 import co.edu.univalle.vivaeventoseventservice.domain.model.DiscountType;
 import jakarta.persistence.*;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -9,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
+@Setter
 @Table(
         name = "discount_codes",
         uniqueConstraints = {
