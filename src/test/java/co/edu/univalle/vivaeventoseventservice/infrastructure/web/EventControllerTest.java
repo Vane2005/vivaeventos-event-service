@@ -379,7 +379,7 @@ class EventControllerTest {
                 .when(cancelEventUseCase).execute(eq(eventId), anyString(), anyString());
 
         String body = """
-                { "reason": "Razón" }
+                { "reason": "Motivo suficientemente largo para pasar validación" }
                 """;
 
         mockMvc.perform(patch("/api/v1/events/" + eventId + "/cancel")
