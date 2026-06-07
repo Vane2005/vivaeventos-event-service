@@ -16,9 +16,13 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CancelEventUseCase {
+
+    private static final Logger logger = LoggerFactory.getLogger(CancelEventUseCase.class);
 
     private final EventJpaRepository eventJpaRepository;
     private final EventCancellationJpaRepository cancellationJpaRepository;
@@ -87,8 +91,7 @@ public class CancelEventUseCase {
 
         } catch (Exception e) {
 
-            System.out.println("RabbitMQ no disponible. Evento cancelado igualmente.");
-            e.printStackTrace();
+            logger.warn("RabbitMQ no disponible. Evento cancelado igualmente.");
 
         }
     }
