@@ -57,6 +57,7 @@ public class EventController {
         entity.setEventDate(request.getEventDate());
         entity.setLocation(request.getLocation());
         entity.setCapacity(request.getCapacity());
+        entity.setStatus(EventStatus.ACTIVE);
         entity.setCreatedBy(userId);
         entity.setCreatedAt(Instant.now());
 

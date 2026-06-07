@@ -77,10 +77,19 @@ public class CancelEventUseCase {
                 now
         );
 
-        rabbitTemplate.convertAndSend(
-                RabbitMQConfig.EXCHANGE,
-                RabbitMQConfig.ROUTING_KEY_EVENTO_CANCELADO,
-                message
-        );
+        try {
+
+            rabbitTemplate.convertAndSend(
+                    RabbitMQConfig.EXCHANGE,
+                    RabbitMQConfig.ROUTING_KEY_EVENTO_CANCELADO,
+                    message
+            );
+
+        } catch (Exception e) {
+
+            System.out.println("RabbitMQ no disponible. Evento cancelado igualmente.");
+            e.printStackTrace();
+
+        }
     }
 }
