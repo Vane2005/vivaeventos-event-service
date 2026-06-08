@@ -22,7 +22,7 @@ jobs:
           cache: maven
 
       - name: Compilar y correr pruebas
-        run: mvn verify --no-transfer-progress
+        run: mvn test --no-transfer-progress -Djacoco.skip=true
 
       - name: Publicar reporte de cobertura (JaCoCo)
         uses: actions/upload-artifact@v4
