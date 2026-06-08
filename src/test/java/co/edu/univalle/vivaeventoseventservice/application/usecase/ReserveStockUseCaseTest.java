@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,6 +40,29 @@ class ReserveStockUseCaseTest {
         ticketTypeEntity.setId(ticketTypeId);
         ticketTypeEntity.setQuantityAvailable(10);
     }
+
+    @Test
+    void shouldReleaseStockSuccessfully() {
+        UUID ticketTypeId = UUID.randomUUID();
+        TicketTypeEntity entity = new TicketTypeEntity();
+        entity.setId(ticketTypeId);
+        entity.setQuantityAvailable(10);
+        when(ticketTypeJpaRepository.
+                findById(ticketTypeId))
+                .thenReturn(Optional.of(entity));
+        reserveStockUseCase.release(ticketTypeId, 5);
+        assertEquals(15, entity.getQuantityAvailable());
+        verify(ticketTypeJpaRepository).save(entity);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTicketTypeNotFound() {
+        UUID ticketTypeId = UUID.randomUUID();
+        when(ticketTypeJpaRepository.findById(ticketTypeId))
+                .thenReturn(Optional.empty());
+        assertThrows(ResponseStatusException.class, () -> reserveStockUseCase.release(ticketTypeId, 5) );
+    }
+
 
     @Test
     @DisplayName("Debe reservar stock correctamente cuando hay suficiente disponible")
