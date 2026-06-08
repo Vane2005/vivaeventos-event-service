@@ -34,4 +34,13 @@ public class ReserveStockUseCase {
         entity.setQuantityAvailable(entity.getQuantityAvailable() - quantity);
         ticketTypeJpaRepository.save(entity);
     }
+
+    @Transactional
+    public void release(UUID ticketTypeId, int quantity) {
+        TicketTypeEntity entity = ticketTypeJpaRepository.findById(ticketTypeId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Tipo de boleta no encontrado"));
+        entity.setQuantityAvailable(entity.getQuantityAvailable() + quantity);
+        ticketTypeJpaRepository.save(entity);
+    }
 }
