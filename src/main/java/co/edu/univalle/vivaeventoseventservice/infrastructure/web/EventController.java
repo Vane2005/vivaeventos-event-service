@@ -187,4 +187,12 @@ public class EventController {
         return ResponseEntity.ok(updated);
     }
 
+    @PutMapping("/ticket-types/{ticketTypeId}/release")
+    public ResponseEntity<Void> releaseStock(
+            @PathVariable UUID ticketTypeId,
+            @RequestParam int quantity) {
+        reserveStockUseCase.release(ticketTypeId, quantity);
+        return ResponseEntity.ok().build();
+    }
+
 }
