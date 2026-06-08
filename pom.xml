@@ -170,5 +170,10 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>coverage</id>
+        </profile>
+    </profiles>
 
 </project>

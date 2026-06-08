@@ -4,7 +4,7 @@ INSERT INTO events (id, name, description, event_date, location, capacity, creat
                                                                                                                ('9dcf76b9-ca44-4192-b274-dd2d8b0afa2f', 'Feria de las Flores - Noche de Salsa', 'Noche especial de salsa caleña en el marco de la Feria de las Flores. Los mejores salseros de Cali y Medellín se unen en una noche inolvidable.', '2025-08-05 20:00:00+00', 'Plaza Mayor, Medellín', 8000, 'admin', now(), 'ACTIVE'),
                                                                                                                ('5c2ee69b-6352-4af7-842d-6bfa30880013', 'Congreso Internacional de Tecnología VivaFuture', 'Dos días de conferencias, talleres y networking con líderes tech de Latinoamérica. Temas: IA, blockchain, ciberseguridad y desarrollo de software.', '2025-10-03 08:00:00+00', 'Centro de Convenciones, Cali', 2000, 'admin', now(), 'ACTIVE'),
                                                                                                                ('95051f33-3243-4c25-b43d-6fcee9dc150c', 'Noche de Cine Bajo las Estrellas', 'Proyección al aire libre de clásicos del cine latinoamericano. Trae tu cobija, disfruta de comida artesanal y vive una experiencia única en familia.', '2025-07-19 19:00:00+00', 'Parque del Café, Montenegro, Quindío', 1200, 'admin', now(), 'ACTIVE')
-    ON CONFLICT (id) DO NOTHING;
+
 
 -- Ticket types
 INSERT INTO ticket_types (id, type, price, quantity_available, event_id) VALUES
@@ -20,4 +20,3 @@ INSERT INTO ticket_types (id, type, price, quantity_available, event_id) VALUES
                                                                              (gen_random_uuid(), 'GENERAL',   45000, 600,  '95051f33-3243-4c25-b43d-6fcee9dc150c'),
                                                                              (gen_random_uuid(), 'VIP',       90000, 100,  '95051f33-3243-4c25-b43d-6fcee9dc150c'),
                                                                              (gen_random_uuid(), 'STUDENT',   25000, 300,  '95051f33-3243-4c25-b43d-6fcee9dc150c')
-    ON CONFLICT (id) DO NOTHING;
